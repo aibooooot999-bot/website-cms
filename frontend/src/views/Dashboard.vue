@@ -70,8 +70,8 @@ function getActionLabel(action: string) {
   <div>
     <!-- Welcome -->
     <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-900">
-        歡迎回來，{{ authStore.user?.display_name }} 👋
+      <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        歡迎回來，{{ authStore.user?.display_name }} <i class="fas fa-hand-wave text-yellow-500 animate-wave"></i>
       </h1>
       <p class="text-gray-500 mt-1">這是您的網站管理後台概覽</p>
     </div>
@@ -84,36 +84,44 @@ function getActionLabel(action: string) {
     <template v-else>
       <!-- Stats Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="stat-card flex items-center justify-between">
+        <div class="stat-card flex items-center justify-between group">
           <div>
             <p class="stat-value">{{ stats?.totalPages || 0 }}</p>
             <p class="stat-label">總頁面數</p>
           </div>
-          <div class="stat-icon bg-blue-100 text-blue-600">📄</div>
+          <div class="stat-icon bg-blue-100 text-blue-600">
+            <i class="fas fa-file-lines"></i>
+          </div>
         </div>
         
-        <div class="stat-card flex items-center justify-between">
+        <div class="stat-card flex items-center justify-between group">
           <div>
             <p class="stat-value">{{ stats?.publishedPages || 0 }}</p>
             <p class="stat-label">已發布</p>
           </div>
-          <div class="stat-icon bg-green-100 text-green-600">✅</div>
+          <div class="stat-icon bg-green-100 text-green-600">
+            <i class="fas fa-circle-check"></i>
+          </div>
         </div>
         
-        <div class="stat-card flex items-center justify-between">
+        <div class="stat-card flex items-center justify-between group">
           <div>
             <p class="stat-value">{{ stats?.totalUsers || 0 }}</p>
             <p class="stat-label">使用者</p>
           </div>
-          <div class="stat-icon bg-purple-100 text-purple-600">👥</div>
+          <div class="stat-icon bg-purple-100 text-purple-600">
+            <i class="fas fa-users"></i>
+          </div>
         </div>
         
-        <div class="stat-card flex items-center justify-between">
+        <div class="stat-card flex items-center justify-between group">
           <div>
             <p class="stat-value">{{ stats?.recentActivities || 0 }}</p>
             <p class="stat-label">近 7 天活動</p>
           </div>
-          <div class="stat-icon bg-orange-100 text-orange-600">📈</div>
+          <div class="stat-icon bg-orange-100 text-orange-600">
+            <i class="fas fa-chart-line"></i>
+          </div>
         </div>
       </div>
 
@@ -127,35 +135,35 @@ function getActionLabel(action: string) {
             <RouterLink 
               v-if="authStore.hasPermission('pages.create')"
               to="/pages/create" 
-              class="flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 hover:border-primary-500 hover:bg-primary-50 transition-colors"
+              class="quick-action-card group"
             >
-              <span class="text-3xl">➕</span>
+              <i class="fas fa-plus text-3xl text-primary-600 group-hover:scale-110 transition-transform"></i>
               <span class="text-sm font-medium text-gray-700">新增頁面</span>
             </RouterLink>
             
             <RouterLink 
               v-if="authStore.hasPermission('pages.view')"
               to="/pages" 
-              class="flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 hover:border-primary-500 hover:bg-primary-50 transition-colors"
+              class="quick-action-card group"
             >
-              <span class="text-3xl">📄</span>
+              <i class="fas fa-file-lines text-3xl text-primary-600 group-hover:scale-110 transition-transform"></i>
               <span class="text-sm font-medium text-gray-700">管理頁面</span>
             </RouterLink>
             
             <RouterLink 
               v-if="authStore.hasPermission('users.view')"
               to="/users" 
-              class="flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 hover:border-primary-500 hover:bg-primary-50 transition-colors"
+              class="quick-action-card group"
             >
-              <span class="text-3xl">👥</span>
+              <i class="fas fa-users text-3xl text-primary-600 group-hover:scale-110 transition-transform"></i>
               <span class="text-sm font-medium text-gray-700">管理使用者</span>
             </RouterLink>
             
             <RouterLink 
               to="/profile" 
-              class="flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 hover:border-primary-500 hover:bg-primary-50 transition-colors"
+              class="quick-action-card group"
             >
-              <span class="text-3xl">⚙️</span>
+              <i class="fas fa-gear text-3xl text-primary-600 group-hover:scale-110 group-hover:rotate-90 transition-all"></i>
               <span class="text-sm font-medium text-gray-700">個人設定</span>
             </RouterLink>
           </div>

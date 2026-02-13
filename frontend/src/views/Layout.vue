@@ -13,27 +13,27 @@ const userMenuOpen = ref(false)
 const menuItems = computed(() => [
   { 
     name: '儀表板', 
-    icon: '📊', 
+    icon: 'fa-chart-line', 
     to: '/', 
     active: route.path === '/' 
   },
   { 
     name: '頁面管理', 
-    icon: '📄', 
+    icon: 'fa-file-lines', 
     to: '/pages', 
     active: route.path.startsWith('/pages'),
     permission: 'pages.view'
   },
   { 
     name: '使用者管理', 
-    icon: '👥', 
+    icon: 'fa-users', 
     to: '/users', 
     active: route.path === '/users',
     permission: 'users.view'
   },
   { 
     name: '角色權限', 
-    icon: '🛡️', 
+    icon: 'fa-shield-halved', 
     to: '/roles', 
     active: route.path === '/roles',
     permission: 'roles.view'
@@ -64,8 +64,8 @@ function handleLogout() {
       <!-- Logo -->
       <div class="sidebar-header">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-primary-500 rounded-lg flex items-center justify-center text-xl">
-            🏢
+          <div class="w-10 h-10 bg-primary-500 rounded-lg flex items-center justify-center text-xl logo-icon">
+            <i class="fas fa-building"></i>
           </div>
           <span v-show="sidebarOpen" class="text-lg font-bold text-white">CMS</span>
         </div>
@@ -81,14 +81,14 @@ function handleLogout() {
           :to="item.to"
           :class="['sidebar-item', { active: item.active }]"
         >
-          <span class="text-xl">{{ item.icon }}</span>
+          <i :class="['fas', item.icon, 'sidebar-icon']"></i>
           <span v-show="sidebarOpen">{{ item.name }}</span>
         </RouterLink>
 
         <div class="sidebar-section mt-8" v-show="sidebarOpen">設定</div>
         
         <RouterLink to="/profile" :class="['sidebar-item', { active: route.path === '/profile' }]">
-          <span class="text-xl">⚙️</span>
+          <i class="fas fa-gear sidebar-icon"></i>
           <span v-show="sidebarOpen">個人設定</span>
         </RouterLink>
       </nav>
@@ -164,14 +164,14 @@ function handleLogout() {
                 class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
               >
                 <RouterLink to="/profile" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                  <span>⚙️</span> 個人設定
+                  <i class="fas fa-gear"></i> 個人設定
                 </RouterLink>
                 <hr class="my-1 border-gray-200" />
                 <button 
                   @click="handleLogout"
                   class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full"
                 >
-                  <span>🚪</span> 登出
+                  <i class="fas fa-right-from-bracket"></i> 登出
                 </button>
               </div>
             </div>

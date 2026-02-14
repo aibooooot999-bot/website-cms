@@ -170,41 +170,7 @@ function getActionLabel(action: string) {
         </div>
       </div>
 
-      <!-- Recent Activities -->
-      <div class="card" v-if="authStore.hasPermission('logs.view') && activities.length > 0">
-        <div class="card-header">
-          <h2 class="card-title">近期活動</h2>
-        </div>
-        <div class="table-wrapper">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>使用者</th>
-                <th>動作</th>
-                <th>詳情</th>
-                <th>時間</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="activity in activities" :key="activity.id">
-                <td>
-                  <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-sm font-medium">
-                      {{ activity.user_name?.[0] || '?' }}
-                    </div>
-                    <span>{{ activity.user_name || '未知' }}</span>
-                  </div>
-                </td>
-                <td>
-                  <span class="badge badge-info">{{ getActionLabel(activity.action) }}</span>
-                </td>
-                <td class="text-gray-500">{{ activity.details }}</td>
-                <td class="text-gray-500">{{ formatDate(activity.created_at) }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    
     </template>
   </div>
 </template>

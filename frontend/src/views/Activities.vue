@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { useApi } from '../composables/useApi'
+import axios from 'axios'
 
 interface Activity {
   id: string
@@ -26,17 +26,20 @@ onMounted(() => {
 
 async function loadActivities() {
   loading.value = true
-  const api = useApi()
   
-  const offset = (currentPage.value - 1) * pageSize.value
-  const res = await api.get(`/api/dashboard/activities?limit=${pageSize.value}&offset=${offset}`)
-  
-  if (res.success) {
-    activities.value = res.data || []
-    totalCount.value = res.total || activities.value.length
+  try {
+    const offset = (currentPage.value - 1) * pageSize.value
+    const response = await axios.get(`/api/dashboard/activities?limit=${pageSize.value}&offset=${offset}`)
+    
+    if (response.data.success) {
+      activities.value = response.data.data || []
+      totalCount.value = response.data.total || activities.value.length
+    }
+  } catch (error) {
+    console.error('無法載入活動記錄:', error)
+  } finally {
+    loading.value = false
   }
-  
-  loading.value = false
 }
 
 function changePage(page: number) {

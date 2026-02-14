@@ -26,6 +26,16 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '頁面管理', permission: 'pages.view' }
       },
       {
+          path: 'pages/create',
+          name: 'page-create',
+          component: () => import('../views/PageEdit.vue')
+      },
+      {
+        path: 'pages/:id/edit',
+        name: 'page-edit',
+        component: () => import('../views/PageEdit.vue')
+      },
+      {
         path: 'users',
         name: 'Users',
         component: () => import('../views/Users.vue'),
@@ -59,11 +69,11 @@ const router = createRouter({
 })
 
 // Navigation guard
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   const authStore = useAuthStore()
   
   // Check if route requires auth
-  if (to.meta.requiresAuth !== false && !authStore.isAuthenticated) {
+  if (to.meta.requiresAuth !== false && !authStore.isLoggedIn) {
     next('/login')
     return
   }
@@ -75,7 +85,7 @@ router.beforeEach((to, from, next) => {
   }
   
   // Redirect to dashboard if already logged in and trying to access login
-  if (to.path === '/login' && authStore.isAuthenticated) {
+  if (to.path === '/login' && authStore.isLoggedIn) {
     next('/')
     return
   }

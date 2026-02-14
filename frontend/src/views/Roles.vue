@@ -175,7 +175,7 @@ onMounted(fetchData)
         @click="openCreateModal"
         class="btn btn-primary"
       >
-        <span>➕</span>
+        <span><i class="fa-solid fa-plus"></i></span>
         <span>新增角色</span>
       </button>
     </div>
@@ -223,21 +223,21 @@ onMounted(fetchData)
           
           <div class="flex items-center gap-2 pt-4 border-t border-gray-100">
             <button @click="openViewModal(role)" class="btn btn-ghost btn-sm flex-1">
-              👁️ 檢視
+              <i class="fa-solid fa-eye"></i> 檢視
             </button>
             <button 
               v-if="authStore.hasPermission('roles.manage') && !role.is_system"
               @click="openEditModal(role)" 
               class="btn btn-ghost btn-sm flex-1"
             >
-              ✏️ 編輯
+              <i class="fa-solid fa-pen-to-square"></i>
             </button>
             <button 
               v-if="authStore.hasPermission('roles.manage') && !role.is_system"
               @click="deleteRole(role)"
               class="btn btn-ghost btn-sm text-red-600 hover:bg-red-50"
             >
-              🗑️
+              <i class="fa-solid fa-trash"></i>
             </button>
           </div>
         </div>

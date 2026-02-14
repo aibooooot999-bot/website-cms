@@ -11,7 +11,7 @@ build/
 # Database
 *.db
 data/
-backend/data/
+cms.db
 
 # Logs
 logs/

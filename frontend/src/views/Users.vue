@@ -166,7 +166,7 @@ onMounted(fetchData)
         @click="openCreateModal"
         class="btn btn-primary"
       >
-        <span>➕</span>
+        <span><i class="fa-solid fa-plus"></i></span>
         <span>新增使用者</span>
       </button>
     </div>
@@ -224,14 +224,14 @@ onMounted(fetchData)
                     @click="openEditModal(user)"
                     class="btn btn-ghost btn-sm"
                   >
-                    ✏️ 編輯
+                    <i class="fa-solid fa-pen-to-square"></i>
                   </button>
                   <button 
                     v-if="authStore.hasPermission('users.delete') && user.id !== authStore.user?.id"
                     @click="deleteUser(user)"
                     class="btn btn-ghost btn-sm text-red-600 hover:bg-red-50"
                   >
-                    🗑️ 刪除
+                    <i class="fa-solid fa-trash"></i>
                   </button>
                 </div>
               </td>

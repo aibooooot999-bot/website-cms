@@ -73,7 +73,7 @@ onMounted(fetchPages)
         to="/pages/create" 
         class="btn btn-primary"
       >
-        <span>➕</span>
+        <span><i class="fa-solid fa-plus"></i></span>
         <span>新增頁面</span>
       </RouterLink>
     </div>
@@ -137,7 +137,7 @@ onMounted(fetchPages)
                     :to="`/pages/${page.id}/edit`"
                     class="btn btn-ghost btn-sm"
                   >
-                    ✏️ 編輯
+                    <i class="fa-solid fa-pen-to-square"></i> 
                   </RouterLink>
                   <button 
                     v-if="authStore.hasPermission('pages.delete')"
@@ -146,7 +146,7 @@ onMounted(fetchPages)
                     class="btn btn-ghost btn-sm text-red-600 hover:bg-red-50"
                   >
                     <span v-if="deleting === page.id" class="spinner w-4 h-4"></span>
-                    <span v-else>🗑️ 刪除</span>
+                    <span v-else><i class="fa-solid fa-trash"></i></span>
                   </button>
                 </div>
               </td>

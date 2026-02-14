@@ -132,6 +132,16 @@ function handleLogout() {
           </div>
 
           <div class="flex items-center gap-4">
+            <!-- Activities -->
+            <RouterLink 
+              v-if="authStore.hasPermission('logs.view')"
+              to="/activities" 
+              class="relative p-2 rounded-lg hover:bg-gray-100 transition-colors group"
+              :class="{ 'bg-primary-50': route.path === '/activities' }"
+            >
+              <i class="fas fa-clock-rotate-left text-xl text-gray-600 group-hover:text-primary-600 transition-colors"></i>
+            </RouterLink>
+            
             <!-- Notifications -->
             <button class="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
               <svg class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -436,15 +436,20 @@ export function logActivity(data: {
   saveDb();
 }
 
-export function getActivityLogs(limit = 20) {
+export function getActivityLogs(limit = 20, offset = 0) {
   const result = db.exec(`
     SELECT a.*, u.display_name as user_name
     FROM activity_logs a
     LEFT JOIN users u ON a.user_id = u.id
     ORDER BY a.created_at DESC
-    LIMIT ${limit}
+    LIMIT ${limit} OFFSET ${offset}
   `);
   return execToArray(result);
+}
+
+export function getActivityLogsCount() {
+  const result = db.exec(`SELECT COUNT(*) as count FROM activity_logs`);
+  return execToOne(result)?.count || 0;
 }
 
 // ===== Dashboard Stats =====

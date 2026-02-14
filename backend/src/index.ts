@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { initDatabase, getDashboardStats, getActivityLogs } from './database.js';
+import { initDatabase, getDashboardStats, getActivityLogs, getActivityLogsCount } from './database.js';
 import { authenticate, AuthRequest, requirePermission } from './auth.js';
 import authRoutes from './routes/auth.js';
 import usersRoutes from './routes/users.js';
@@ -37,8 +37,10 @@ app.get('/api/dashboard/stats', authenticate, (req, res) => {
 app.get('/api/dashboard/activities', authenticate, requirePermission('logs.view'), (req: AuthRequest, res) => {
   try {
     const limit = parseInt(req.query.limit as string) || 20;
-    const logs = getActivityLogs(limit);
-    res.json({ success: true, data: logs });
+    const offset = parseInt(req.query.offset as string) || 0;
+    const logs = getActivityLogs(limit, offset);
+    const total = getActivityLogsCount();
+    res.json({ success: true, data: logs, total });
   } catch (e: any) {
     res.status(500).json({ success: false, error: e.message });
   }

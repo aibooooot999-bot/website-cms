@@ -1,11 +1,17 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { initDatabase, getDashboardStats, getActivityLogs, getActivityLogsCount } from './database.js';
 import { authenticate, AuthRequest, requirePermission } from './auth.js';
 import authRoutes from './routes/auth.js';
 import usersRoutes from './routes/users.js';
 import rolesRoutes from './routes/roles.js';
 import pagesRoutes from './routes/pages.js';
+import uploadRoutes from './routes/upload.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -13,6 +19,9 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+
+// 靜態檔案服務（上傳的圖片）
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // 初始化資料庫（async）
 await initDatabase();
@@ -22,6 +31,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/roles', rolesRoutes);
 app.use('/api/pages', pagesRoutes);
+app.use('/api/upload', authenticate, uploadRoutes);
 
 // Dashboard Stats
 app.get('/api/dashboard/stats', authenticate, (req, res) => {

@@ -35,3 +35,10 @@ Thumbs.db
 # Testing
 coverage/
 backend/data/cms.db
+
+# Uploads (keep directory structure)
+backend/uploads/*
+!backend/uploads/.gitkeep
+!backend/uploads/images/
+backend/uploads/images/*
+!backend/uploads/images/.gitkeep

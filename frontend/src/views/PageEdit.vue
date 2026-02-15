@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useApi } from '../composables/useApi'
 import { useAuthStore } from '../stores/auth'
 
@@ -38,6 +40,77 @@ const statusOptions = [
   { value: 'draft', label: '草稿' },
   { value: 'published', label: '發布' },
 ]
+
+// Quill 設定
+const editorOptions = {
+  theme: 'snow',
+  modules: {
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'align': [] }],
+        ['blockquote', 'code-block'],
+        ['link', 'image', 'video'],
+        ['clean']
+      ],
+      handlers: {
+        image: imageHandler
+      }
+    }
+  }
+}
+
+const quillEditor = ref()
+
+// 圖片上傳處理
+function imageHandler() {
+  const input = document.createElement('input')
+  input.setAttribute('type', 'file')
+  input.setAttribute('accept', 'image/*')
+  input.click()
+
+  input.onchange = async () => {
+    const file = input.files?.[0]
+    if (!file) return
+
+    // 檢查檔案大小
+    if (file.size > 5 * 1024 * 1024) {
+      error.value = '圖片大小不可超過 5MB'
+      return
+    }
+
+    // 上傳圖片
+    const formData = new FormData()
+    formData.append('image', file)
+
+    try {
+      const response = await fetch('http://localhost:3001/api/upload/image', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${authStore.token}`
+        },
+        body: formData
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        const imageUrl = `http://localhost:3001${result.data.url}`
+        const quill = quillEditor.value.getQuill()
+        const range = quill.getSelection()
+        quill.insertEmbed(range.index, 'image', imageUrl)
+        quill.setSelection(range.index + 1)
+      } else {
+        error.value = result.error || '圖片上傳失敗'
+      }
+    } catch (e: any) {
+      error.value = e.message || '圖片上傳失敗'
+    }
+  }
+}
 
 async function fetchPage() {
   if (!isEdit.value) return
@@ -173,12 +246,13 @@ onMounted(fetchPage)
               
               <div>
                 <label class="form-label">內容</label>
-                <textarea
-                  v-model="form.content"
-                  class="form-textarea"
-                  rows="15"
-                  placeholder="輸入頁面內容（支援 HTML）..."
-                ></textarea>
+                <QuillEditor 
+                  ref="quillEditor"
+                  v-model:content="form.content"
+                  contentType="html"
+                  :options="editorOptions"
+                  style="min-height: 400px;"
+                />
               </div>
             </div>
           </div>
@@ -258,3 +332,28 @@ onMounted(fetchPage)
     </form>
   </div>
 </template>
+
+<style scoped>
+/* Quill 編輯器樣式調整 */
+:deep(.ql-container) {
+  min-height: 350px;
+  font-family: inherit;
+}
+
+:deep(.ql-editor) {
+  min-height: 350px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+:deep(.ql-toolbar) {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+:deep(.ql-container) {
+  border-color: #e5e7eb;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+</style>

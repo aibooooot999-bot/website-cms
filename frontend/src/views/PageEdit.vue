@@ -5,6 +5,7 @@ import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useApi } from '../composables/useApi'
 import { useAuthStore } from '../stores/auth'
+import MediaPicker from '../components/MediaPicker.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -28,6 +29,7 @@ const form = ref({
 const loading = ref(false)
 const saving = ref(false)
 const error = ref('')
+const showMediaPicker = ref(false)
 
 const templates = [
   { value: 'default', label: '預設模板' },
@@ -65,51 +67,17 @@ const editorOptions = {
 
 const quillEditor = ref()
 
-// 圖片上傳處理
+// 圖片處理：開啟媒體選擇器
 function imageHandler() {
-  const input = document.createElement('input')
-  input.setAttribute('type', 'file')
-  input.setAttribute('accept', 'image/*')
-  input.click()
+  showMediaPicker.value = true
+}
 
-  input.onchange = async () => {
-    const file = input.files?.[0]
-    if (!file) return
-
-    // 檢查檔案大小
-    if (file.size > 5 * 1024 * 1024) {
-      error.value = '圖片大小不可超過 5MB'
-      return
-    }
-
-    // 上傳圖片
-    const formData = new FormData()
-    formData.append('image', file)
-
-    try {
-      const response = await fetch('http://localhost:3001/api/upload/image', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authStore.token}`
-        },
-        body: formData
-      })
-
-      const result = await response.json()
-
-      if (result.success) {
-        const imageUrl = `http://localhost:3001${result.data.url}`
-        const quill = quillEditor.value.getQuill()
-        const range = quill.getSelection()
-        quill.insertEmbed(range.index, 'image', imageUrl)
-        quill.setSelection(range.index + 1)
-      } else {
-        error.value = result.error || '圖片上傳失敗'
-      }
-    } catch (e: any) {
-      error.value = e.message || '圖片上傳失敗'
-    }
-  }
+// 插入選擇的圖片
+function handleImageSelect(imageUrl: string) {
+  const quill = quillEditor.value.getQuill()
+  const range = quill.getSelection()
+  quill.insertEmbed(range.index, 'image', imageUrl)
+  quill.setSelection(range.index + 1)
 }
 
 async function fetchPage() {
@@ -330,6 +298,13 @@ onMounted(fetchPage)
         </div>
       </div>
     </form>
+
+    <!-- Media Picker Modal -->
+    <MediaPicker
+      v-if="showMediaPicker"
+      @select="handleImageSelect"
+      @close="showMediaPicker = false"
+    />
   </div>
 </template>
 

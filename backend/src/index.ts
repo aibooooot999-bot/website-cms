@@ -9,6 +9,7 @@ import usersRoutes from './routes/users.js';
 import rolesRoutes from './routes/roles.js';
 import pagesRoutes from './routes/pages.js';
 import uploadRoutes from './routes/upload.js';
+import mediaRoutes from './routes/media.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +33,7 @@ app.use('/api/users', usersRoutes);
 app.use('/api/roles', rolesRoutes);
 app.use('/api/pages', pagesRoutes);
 app.use('/api/upload', authenticate, uploadRoutes);
+app.use('/api/media', authenticate, mediaRoutes);
 
 // Dashboard Stats
 app.get('/api/dashboard/stats', authenticate, (req, res) => {

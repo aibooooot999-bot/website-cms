@@ -25,6 +25,12 @@ const menuItems = computed(() => [
     permission: 'pages.view'
   },
   { 
+    name: '媒體庫', 
+    icon: 'fa-images', 
+    to: '/media', 
+    active: route.path === '/media'
+  },
+  { 
     name: '使用者管理', 
     icon: 'fa-users', 
     to: '/users', 

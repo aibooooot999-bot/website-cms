@@ -36,6 +36,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../views/PageEdit.vue')
       },
       {
+        path: 'media',
+        name: 'Media',
+        component: () => import('../views/Media.vue'),
+        meta: { title: '媒體庫' }
+      },
+      {
         path: 'users',
         name: 'Users',
         component: () => import('../views/Users.vue'),
